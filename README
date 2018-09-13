@@ -1,0 +1,84 @@
+Dyntaxa <https://www.dyntaxa.se> allows downloading taxon information,
+but it's Excel, there's no URL for it (but manual steps to recreate
+it), and the revision history is unclear.
+
+This is a secondary copy of part of the information, refreshed now and
+then.  For example, for the birds, it was created by:
+
+    - Going to <https://www.dyntaxa.se/Export/TaxonList/4000104>
+    - Selecting settings according to below, and generating Aves.xlsx.
+    - Using the Makefile to generate the text file 'Aves'.
+
+The resulting files are utf8-encoded, and look like e.g.
+
+    @
+    0  = TaxonId
+    1  = Taxonkategori
+    2  = Vetenskapligt namn
+    3  = Auktor
+    4  = Svenskt namn
+    ...
+    @
+    0  = 102944
+    1  = Art
+    2  = Lagopus lagopus
+    3  = (Linnaeus, 1758)
+    4  = dalripa
+    ...
+
+I.e. it's the Excel lines and columns, in a text format that's easy to
+parse and works well under version control.
+
+
+--------------------------------------------------------------------------------
+
+<https://www.dyntaxa.se/Export/TaxonList/6000506>
+
+    Tracheophyta - kärlväxter
+    Exportera/Rak lista
+
+    Urval av taxa (listans rader)
+    Kategorier: Familj, Släkte, Artkomplex, Sektion, Aggregat, Art, Underart, Varietet, Hybrid
+    Svensk förekomst: Alla
+    Svensk invandringshistoria: Alla
+    Taxonstatus: ja
+
+    Taxoninformation (listans kolumner)
+    Kategorier: -
+    Namn: -
+
+    - Vetenskapligt namn
+    - Auktor
+    - Svenskt namn
+    - Taxonkategori
+    - TaxonId
+
+<https://www.dyntaxa.se/Export/TaxonList/4000104>
+
+    Aves - fåglar
+
+    Kategorier: Familj, Släkte, Art, Underart, Hybrid
+
+<https://www.dyntaxa.se/Export/TaxonList/4000105>
+
+    Amphibia - groddjur
+
+    Kategorier: Familj, Släkte, Art, Hybrid
+
+<https://www.dyntaxa.se/Export/TaxonList/4000106>
+
+    Reptilia - kräldjur
+
+    Kategorier: Familj, Släkte, Art, Underart
+
+<https://www.dyntaxa.se/Export/TaxonList/4000107>
+
+    Mammalia - däggdjur
+
+    Kategorier: Familj, Släkte, Art, Underart
+
+<https://www.dyntaxa.se/Export/TaxonList/4000074>
+
+    Insecta - egentliga insekter
+
+    Kategorier: Familj, Släkte, Art, Underart
