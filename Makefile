@@ -5,5 +5,3 @@ all: Mammalia
 all: Reptilia
 all: Insecta
 
-%: %.xlsx
-	./xls2txt $< >$@
