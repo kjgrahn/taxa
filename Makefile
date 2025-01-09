@@ -17,6 +17,9 @@ CXXFLAGS=-Wall -Wextra -pedantic -std=c++17 -g -Os
 CPPFLAGS=
 ARFLAGS=rTP
 
+taxa: taxa.o libtaxa.a
+	$(CXX) $(CXXFLAGS) -L. -o $@ $< -ltaxa
+
 unpack: unpack.o libtaxa.a
 	$(CXX) $(CXXFLAGS) -L. -o $@ $< -ltaxa -larchive
 
@@ -47,7 +50,7 @@ test/%.o: CPPFLAGS+=-I.
 
 .PHONY: clean
 clean:
-	$(RM) unpack
+	$(RM) taxa unpack
 	$(RM) test/test test/test.cc
 	$(RM) *.o lib*.a
 	$(RM) test/*.o

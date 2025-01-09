@@ -1,0 +1,80 @@
+.ss 12 0
+.de BP
+.IP \\fB\\$*
+..
+.
+.TH taxa 1 "MAR 2019" Taxa "User Manuals"
+.SH "NAME"
+taxa \- extract taxon lists from a Darwin Core archive
+.
+.SH "SYNOPSIS"
+.B taxa
+.B --dist
+.I file
+.B --tx
+.I file
+.B --names
+.I file
+.I taxon
+\&...
+.br
+.B taxa --help
+.br
+.B taxa --version
+.
+.
+.SH "DESCRIPTION"
+.
+.B taxa
+reads
+.B "Darwin Core Archive"
+.RB ( DwC-A )
+files, specifically those published by
+.IR Artdatabanken ,
+and prints flat taxon lists, e.g.
+.IP
+.nf
+.ft CW
+# Solanaceae
+belladonna		(Atropa bella-donna)
+indisk spikklubba	(Datura metel)
+spikklubba		(Datura stramonium)
+\&...
+.fi
+.
+.PP
+DwC-A is defined, I suppose, as an MS-DOS ZIP file, but since that's an inconvenient
+format in many ways,
+.B taxa
+assumes it has been unpacked into several CSV files.
+.
+.
+.SH "OPTIONS"
+.
+.BP --dist\ \fIfile
+.BR SpeciesDistribution.csv .
+.
+.BP --tx\ \fIfile
+.BR Taxon.csv .
+.
+.BP --names\ \fIfile
+.BR VernacularName.csv .
+.
+.BP --help
+Print a brief help text and exit.
+.
+.BP --version
+Print version information and exit.
+.
+.
+.SH "AUTHOR"
+.
+J\(:orgen Grahn
+.IR \[fo]grahn@snipabacken.se\[fc] .
+.
+.SH "LICENSE"
+The GNU General Public License (GPL) version 2 or (at your option) version 3.
+.
+.SH "SEE ALSO"
+.
+.RB \[fo] https://metadata.artfakta.se/taxonomiskdata \[fc].
