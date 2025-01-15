@@ -3,17 +3,22 @@
 .IP \\fB\\$*
 ..
 .
-.TH taxa 1 "MAR 2019" Taxa "User Manuals"
+.TH taxa 1 "JAN 2025" Taxa "User Manuals"
 .SH "NAME"
 taxa \- extract taxon lists from a Darwin Core archive
 .
 .SH "SYNOPSIS"
 .B taxa
-.B --dist
-.I file
-.B --tx
+.I src-dir
+.I taxon
+\&...
+.br
+.B taxa
+.B --taxa
 .I file
 .B --names
+.I file
+.B --dist
 .I file
 .I taxon
 \&...
@@ -43,22 +48,114 @@ spikklubba		(Datura stramonium)
 .fi
 .
 .PP
+This format is the same used by
+.B gavia
+and
+.BR groblad ,
+and defined in
+.BR groblad_species (5).
+.
+.PP
+What's printed is every defined taxon under
+.IR taxon ,
+such as all genera, sections, species and subspecies in a plant family.
+.
+.PP
 DwC-A is defined, I suppose, as an MS-DOS ZIP file, but since that's an inconvenient
 format in many ways,
 .B taxa
 assumes it has been unpacked into several CSV files.
 .
 .
+.SS "The data model"
+.
+DwC data (at least as published by Artdatabanken) includes:
+.IP \- 3x
+One accepted name (and auctor) for each taxon.
+.PD 0
+.IP \-
+Frequently, synonyms of varying quality. Some might be well-known, while others are archaic.
+.IP \-
+Taxa at different ranks:
+.BR family ,
+.BR genus ,
+.BR species ,
+.BR subspecies ,
+.BR variety .
+Also
+.BR aggregates ,
+.B sections
+(like those in
+.IR Taraxacum ),
+.B forms
+and
+.BR cultivars .
+As usual, the taxa form a hierarchy.
+.IP \-
+Optionally, a preferred swedish name for the taxon.
+.IP \-
+Also optionally, other swedish names for the taxon.
+The swedish names are never tied to a synonym but to the taxon as a whole,
+as understood today.
+.IP \-
+For many taxa, their
+.B occurrence
+(which may be
+.BR absent )
+and
+.BR "threat status" .
+.PD
+.PP
+More data is present, but this is roughly what's relevant to
+.BR taxa .
+.
+.
+.SS "Taxon lists"
+.
+For each taxon specified, there's a section with a heading. The
+sections appear in the order specified on the command line; this lets
+you get the list in a familiar order (e.g. ferns first and grasses
+last, if that's what you're used to).
+.PP
+In each section, the directly underlying taxa are printed in alphabetic order,
+i.e. sorted by accepted scientific name. Taxa marked as
+.B absent
+in Sweden are skipped; so are
+.B cultivars .
+.PP
+If there's a preferred swedish name, it's printed on the first line.
+All other important synonyms, scientific and otherwise,
+appear on the following lines:
+.IP
+.nf
+.ft CW
+paddfot                 (Asperugo procumbens)
+= riva
+.fi
+.PP
+Then underlying taxa follow, according to the same principles. So subspecies
+appear directly after the species;
+.I Taraxacum
+is arranged into its sections, and so on.
+.
+.
 .SH "OPTIONS"
 .
-.BP --dist\ \fIfile
-.BR SpeciesDistribution.csv .
-.
-.BP --tx\ \fIfile
+.BP --taxa\ \fIfile
 .BR Taxon.csv .
+This, and
+.B --names
+and
+.BR --dist ,
+give detailed control, but usually you'll want to specify
+.I src-dir
+containing these three files.
 .
 .BP --names\ \fIfile
 .BR VernacularName.csv .
+.
+.BP --dist\ \fIfile
+.BR SpeciesDistribution.csv .
 .
 .BP --help
 Print a brief help text and exit.
@@ -72,9 +169,13 @@ Print version information and exit.
 J\(:orgen Grahn
 .IR \[fo]grahn@snipabacken.se\[fc] .
 .
+.
 .SH "LICENSE"
 The GNU General Public License (GPL) version 2 or (at your option) version 3.
 .
+.
 .SH "SEE ALSO"
 .
+.BR groblad_species (5).
+.br
 .RB \[fo] https://metadata.artfakta.se/taxonomiskdata \[fc].

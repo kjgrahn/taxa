@@ -27,6 +27,7 @@ libtaxa.a: split.o
 libtaxa.a: indent.o
 libtaxa.a: utf8.o
 libtaxa.a: cleanup.o
+libtaxa.a: dyntaxa.o
 	$(AR) $(ARFLAGS) $@ $^
 
 # tests
