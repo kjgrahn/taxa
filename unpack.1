@@ -1,0 +1,77 @@
+.ss 12 0
+.de BP
+.IP \\fB\\$*
+..
+.
+.TH unpack 1 "JAN 2025" Taxa "User Manuals"
+.SH "NAME"
+unpack \- extract and tidy up a Darwin Core archive
+.
+.SH "SYNOPSIS"
+.B unpack
+.I dir
+.BI < archive
+.br
+.B unpack --help
+.br
+.B unpack --version
+.
+.
+.SH "DESCRIPTION"
+.
+.B unpack
+reads a
+.B "Darwin Core Archive"
+.RB ( DwC-A )
+file, specifically as published by
+.IR Artdatabanken ,
+and stores its contents as separate files,
+after cleaning them up somewhat:
+.
+.IP \- 3x
+MS-DOS line endings are removed
+.PD 0
+.IP \-
+the dreaded UTF-8 BOM is removed
+.IP \-
+CSV files are sorted on Taxon/TaxonName number.
+.PD
+.
+.PP
+The cleanup is intended to make it easier to use the data, to integrate updates,
+and to keep it under version control in a meaningful way using e.g.
+.BR git (1).
+The CSV sorting, for example, eliminates useless
+rearrangement of lines between versions.
+.
+.PP
+A Darwin Core Archive is a ZIP file. Reading it from stdin means you can let e.g.
+.BR curl (1)
+download it, without necessarily storing the ZIP file itself on disk.
+.
+.SH "OPTIONS"
+.
+.BP --help
+Print a brief help text and exit.
+.
+.BP --version
+Print version information and exit.
+.
+.
+.SH "AUTHOR"
+.
+J\(:orgen Grahn
+.IR \[fo]grahn@snipabacken.se\[fc] .
+Reading streaming ZIP files appears courtesy of the pleasant
+.BR libarchive .
+.
+.
+.SH "LICENSE"
+The GNU General Public License (GPL) version 2 or (at your option) version 3.
+.
+.
+.SH "SEE ALSO"
+.
+.BR taxa (1)
+.br
+.RI \[fo] https://metadata.artfakta.se/taxonomiskdata \[fc].
