@@ -22,6 +22,8 @@ namespace dyntaxa {
     public:
 	explicit Id(const std::string&);
 	bool operator== (const Id& other) const { return val==other.val; }
+	bool operator<  (const Id& other) const { return val < other.val; }
+	explicit operator bool () const { return val.first; }
 
     private:
 	std::pair<char, unsigned> val;

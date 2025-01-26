@@ -16,7 +16,6 @@ Dyntaxa::Dyntaxa(std::istream& taxa,
 
     while (getline(taxa, s)) {
 	const auto v = split("\t", s);
-
 	db.taxa.emplace_back(v);
     }
 
@@ -28,6 +27,12 @@ Dyntaxa::Dyntaxa(std::istream& taxa,
     while (getline(dist, s)) {
 	const auto v = split("\t", s);
 	Distribution val {v};
+    }
+
+    for (const Taxon& tx : db.taxa) {
+	if (accepted(tx) && tx.parent) {
+	    map.children[tx.parent].push_back(&tx);
+	}
     }
 }
 
@@ -48,14 +53,9 @@ const Taxon* Dyntaxa::find_taxon(const std::string& name) const
  */
 std::vector<const Taxon*> Dyntaxa::children(const Taxon& tx) const
 {
-    const auto& id = tx.id;
-    std::vector<const Taxon*> v;
-    for (auto& tx : db.taxa) {
-	if (tx.parent == id && accepted(tx)) {
-	    v.push_back(&tx);
-	}
-    }
-    return v;
+    auto it = map.children.find(tx.id);
+    if (it==end(map.children)) return {};
+    return it->second;
 }
 
 using dyntaxa::Names;

@@ -6,6 +6,7 @@
 #include "distribution.h"
 
 #include <vector>
+#include <map>
 #include <iosfwd>
 
 namespace dyntaxa {
@@ -32,6 +33,10 @@ namespace dyntaxa {
 	struct {
 	    std::vector<Taxon> taxa;
 	} db;
+
+	struct {
+	    std::map<Id, std::vector<const Taxon*>> children;
+	} map;
     };
 }
 
