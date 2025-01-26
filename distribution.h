@@ -1,11 +1,10 @@
 #ifndef TAXA_DISTRIBUTION_H
 #define TAXA_DISTRIBUTION_H
 
+#include "id.h"
 #include <string>
 
 namespace dyntaxa {
-
-    using Id = std::string;
 
     /**
      * taxonId
