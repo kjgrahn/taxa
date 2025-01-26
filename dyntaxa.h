@@ -19,8 +19,9 @@ namespace dyntaxa {
 		std::istream& names,
 		std::istream& dist);
 
+	Dyntaxa(const Dyntaxa&) = delete;
 	Dyntaxa& operator= (Dyntaxa&&) = default;
-	Dyntaxa& operator= (Dyntaxa&) = delete;
+	Dyntaxa& operator= (const Dyntaxa&) = delete;
 
 	void list(std::ostream& os, const std::string& taxon) const;
 	void list(std::ostream& os, const Taxon& taxon) const;
@@ -32,10 +33,12 @@ namespace dyntaxa {
 
 	struct {
 	    std::vector<Taxon> taxa;
+	    std::vector<Name>  names;
 	} db;
 
 	struct {
 	    std::map<Id, std::vector<const Taxon*>> children;
+	    std::map<Id, std::vector<const Name*>> names;
 	} map;
     };
 }

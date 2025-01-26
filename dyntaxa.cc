@@ -21,7 +21,7 @@ Dyntaxa::Dyntaxa(std::istream& taxa,
 
     while (getline(names, s)) {
 	const auto v = split("\t", s);
-	Name val {v};
+	db.names.emplace_back(v);
     }
 
     while (getline(dist, s)) {
@@ -32,6 +32,12 @@ Dyntaxa::Dyntaxa(std::istream& taxa,
     for (const Taxon& tx : db.taxa) {
 	if (accepted(tx) && tx.parent) {
 	    map.children[tx.parent].push_back(&tx);
+	}
+    }
+
+    for (const Name& name : db.names) {
+	if (name.lang=="sv") {
+	    map.names[name.id].push_back(&name);
 	}
     }
 }
@@ -65,21 +71,38 @@ using dyntaxa::Names;
  * whatnot. Only collected so we can print them in a sensible way.
  */
 struct Names {
-    std::string name;
+    const Taxon taxon;
+    const std::vector<const Taxon*> synonyms;
+    const std::vector<const Name*> names;
 
     std::ostream& put(std::ostream& os) const;
 };
 
 std::ostream& Names::put(std::ostream& os) const
 {
-    return os << "-     (" << name << ")\n";
+    auto is_preferred = [] (auto name) { return name->preferred=="true"; };
+
+    auto pit = std::find_if(begin(names), end(names), is_preferred);
+    if (pit==end(names)) pit = begin(names);
+
+    if (pit==end(names)) {
+	return os << "-     (" << taxon.name << ")\n";
+    }
+
+    os << (*pit)->name << " (" << taxon.name << ")\n";
+
+    for (auto it=begin(names); it!=end(names); it++) {
+	if (it==pit) continue;
+	os << "= " << (*it)->name << '\n';
+    }
+    return os;
 }
 
 Names Dyntaxa::names_for(const Taxon& tx) const
 {
-    Names nn;
-    nn.name = tx.name;
-    return nn;
+    auto nit = map.names.find(tx.id);
+    if (nit!=end(map.names)) return {tx, {}, nit->second};
+    return {tx, {}, {}};
 }
 
 /**
