@@ -23,10 +23,33 @@ libtaxa.a: split.o
 libtaxa.a: cleanup.o
 	$(AR) $(ARFLAGS) $@ $^
 
+# tests
+
+.PHONY: check checkv
+check: test/test
+	./test/test
+checkv: test/test
+	valgrind -q ./test/test -v
+
+test/test: test/test.o libtest.a libtaxa.a
+	$(CXX) $(CXXFLAGS) -o $@ test/test.o -L. -ltest -ltaxa
+
+test/test.cc: libtest.a
+	orchis -o $@ $^
+
+libtest.a: test/split.o
+	$(AR) $(ARFLAGS) $@ $^
+
+test/%.o: CPPFLAGS+=-I.
+
+# other
+
 .PHONY: clean
 clean:
 	$(RM) unpack
+	$(RM) test/test test/test.cc
 	$(RM) *.o lib*.a
+	$(RM) test/*.o
 	$(RM) -r dep
 	$(RM) -r TAGS
 
