@@ -24,6 +24,8 @@ unpack: unpack.o libtaxa.a
 	$(CXX) $(CXXFLAGS) -L. -o $@ $< -ltaxa -larchive
 
 libtaxa.a: split.o
+libtaxa.a: indent.o
+libtaxa.a: utf8.o
 libtaxa.a: cleanup.o
 	$(AR) $(ARFLAGS) $@ $^
 
@@ -41,6 +43,8 @@ test/test: test/test.o libtest.a libtaxa.a
 test/test.cc: libtest.a
 	orchis -o $@ $^
 
+libtest.a: test/indent.o
+libtest.a: test/utf8.o
 libtest.a: test/split.o
 	$(AR) $(ARFLAGS) $@ $^
 
