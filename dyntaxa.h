@@ -9,6 +9,8 @@
 #include <map>
 #include <iosfwd>
 
+class Indent;
+
 namespace dyntaxa {
 
     class Names;
@@ -24,12 +26,13 @@ namespace dyntaxa {
 	Dyntaxa& operator= (const Dyntaxa&) = delete;
 
 	void list(std::ostream& os, const std::string& taxon) const;
-	void list(std::ostream& os, const Taxon& taxon) const;
 
     private:
 	const Taxon* find_taxon(const std::string& name) const;
 	std::vector<const Taxon*> children(const Taxon& tx) const;
 	Names names_for(const Taxon& tx) const;
+
+	void list(std::ostream& os, Indent& indent, const Taxon& taxon) const;
 
 	struct {
 	    std::vector<Taxon> taxa;

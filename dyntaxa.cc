@@ -1,6 +1,7 @@
 #include "dyntaxa.h"
 
 #include "split.h"
+#include "indent.h"
 
 #include <iostream>
 #include <algorithm>
@@ -75,10 +76,12 @@ struct Names {
     const std::vector<const Taxon*> synonyms;
     const std::vector<const Name*> names;
 
-    std::ostream& put(std::ostream& os) const;
+    std::ostream& put(std::ostream& os,
+		      Indent& indent) const;
 };
 
-std::ostream& Names::put(std::ostream& os) const
+std::ostream& Names::put(std::ostream& os,
+			 Indent& indent) const
 {
     auto is_preferred = [] (auto name) { return name->preferred=="true"; };
 
@@ -86,10 +89,10 @@ std::ostream& Names::put(std::ostream& os) const
     if (pit==end(names)) pit = begin(names);
 
     if (pit==end(names)) {
-	return os << "-     (" << taxon.name << ")\n";
+	return indent.ljust(os, "-", 23) << " (" << taxon.name << ")\n";
     }
 
-    os << (*pit)->name << " (" << taxon.name << ")\n";
+    indent.ljust(os, (*pit)->name, 23) << " (" << taxon.name << ")\n";
 
     for (auto it=begin(names); it!=end(names); it++) {
 	if (it==pit) continue;
@@ -127,15 +130,17 @@ void Dyntaxa::list(std::ostream& os, const std::string& taxon) const
     os << "# " << taxon << '\n';
     const Taxon* tx = find_taxon(taxon);
     if (!tx) return;
-    list(os, *tx);
+
+    Indent indent;
+    list(os, indent, *tx);
     os << '\n';
 }
 
-void Dyntaxa::list(std::ostream& os, const Taxon& tx) const
+void Dyntaxa::list(std::ostream& os, Indent& indent, const Taxon& tx) const
 {
     for (const Taxon* tx : children(tx)) {
 
-	names_for(*tx).put(os);
-	list(os, *tx);
+	names_for(*tx).put(os, indent);
+	list(os, indent, *tx);
     }
 }
