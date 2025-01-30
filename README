@@ -1,11 +1,12 @@
 SLU Artdatabanken publishes "Dyntaxa – svensk taxonomisk databas" [1].
 That's taxon lists for organisms in Sweden, along with vernacular
-names and so on. People in Sweden generally accept this taxonomy.
+names and so on. People in Sweden generally accept this taxonomy, and
+access it through a web interface called Artfakta.
 
 The data used to be published as Excel sheets, but since 2024 it's
 published in Darwin Core Archive (DwC-A) format.
 
-What's in this repo is two things:
+What's in this repo is three things:
 
 A.  A utility for unpacking a DwC-A archive and cleaning it up, making
     it suitable for tracking and sharing in a Git archive.
@@ -13,6 +14,16 @@ A.  A utility for unpacking a DwC-A archive and cleaning it up, making
 B.  Such an unpacked DwC-A for Dyntaxa, updated now and then.
     This lets you follow the changes made by Artdatabanken, go
     back in time and compare, and so on.
+
+C.  A utility taxa(1) for producing flat taxon lists from the Dyntaxa
+    data. These are suitable for use with programs which needs taxon
+    lists, like gavia[2] and groblad[3].
+
+This is a less-than-ideal mix of tools and other people's data.
+I might split it at some point.
+
+The software is C++ and a Makefile, and should build on any Unix with
+minor adjustments, if you install libarchive first.
 
 In 2018, this same repo used to contain a similar thing, but based on
 the now obsolete Excel sheets. All of that work was hard and
@@ -23,4 +34,7 @@ The source code here is available under The GNU General Public License
 
     Jörgen Grahn <grahn@snipabacken.se>
 
-[1]  https://metadata.artfakta.se/taxonomiskdata
+[1]  https://metadata.artfakta.se/taxonomiskdata,
+     https://artfakta.se/metadata/dyntaxa
+[2]  git://snipabacken.se/gavia
+[3]  git://snipabacken.se/groblad
