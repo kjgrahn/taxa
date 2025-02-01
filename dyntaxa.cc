@@ -17,17 +17,17 @@ Dyntaxa::Dyntaxa(std::istream& taxa,
 
     while (getline(taxa, s)) {
 	const auto v = split("\t", s);
-	db.taxa.emplace_back(v);
+	db.taxa.emplace_back(memo, v);
     }
 
     while (getline(names, s)) {
 	const auto v = split("\t", s);
-	db.names.emplace_back(v);
+	db.names.emplace_back(memo, v);
     }
 
     while (getline(dist, s)) {
 	const auto v = split("\t", s);
-	Distribution val {v};
+	Distribution val {memo, v};
     }
 
     for (const Taxon& tx : db.taxa) {

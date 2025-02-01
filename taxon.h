@@ -53,31 +53,31 @@ namespace dyntaxa {
      *
      */
     struct Taxon {
-	template <class C>
-	explicit Taxon(const C& c);
+	template <class Memo, class C>
+	Taxon(Memo& memo, const C& c);
 
 	const Id id;
 	const Id accepted;
 	const Id parent;
 
 	const std::string name;
-	const std::string rank;
+	const std::string& rank;
 
 	const std::string auctor;
-	const std::string tstatus;
-	const std::string nstatus;
+	const std::string& tstatus;
+	const std::string& nstatus;
     };
 
-    template <class C>
-    Taxon::Taxon(const C& c)
+    template <class Memo, class C>
+    Taxon::Taxon(Memo& memo, const C& c)
 	: id       {c[0]},
 	  accepted {c[1]},
 	  parent   {c[2]},
 	  name     {c[3]},
-	  rank     {c[4]},
+	  rank     {memo(c[4])},
 	  auctor   {c[5]},
-	  tstatus  {c[6]},
-	  nstatus  {c[7]}
+	  tstatus  {memo(c[6])},
+	  nstatus  {memo(c[7])}
     {}
 
     inline bool accepted(const Taxon& tx)

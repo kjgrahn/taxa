@@ -9,6 +9,8 @@
 #include <map>
 #include <iosfwd>
 
+#include "memo.h"
+
 class Indent;
 
 namespace dyntaxa {
@@ -33,6 +35,8 @@ namespace dyntaxa {
 	Names names_for(const Taxon& tx) const;
 
 	void list(std::ostream& os, Indent& indent, const Taxon& taxon) const;
+
+	Memo<std::string> memo;
 
 	struct {
 	    std::vector<Taxon> taxa;

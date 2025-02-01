@@ -22,24 +22,24 @@ namespace dyntaxa {
      * names; no doubt shit will hit the fan when activists notice.
      */
     struct Name {
-	template <class C>
-	explicit Name(const C& c);
+	template <class Memo, class C>
+	Name(Memo& memo, const C& c);
 
 	const Id id;
 	const std::string name;
-	const std::string lang;
-	const std::string country;
+	const std::string& lang;
+	const std::string& country;
 
-	const std::string preferred;
+	const std::string& preferred;
     };
 
-    template <class C>
-    Name::Name(const C& c)
+    template <class Memo, class C>
+    Name::Name(Memo& memo, const C& c)
 	: id        {c[0]},
 	  name      {c[1]},
-	  lang      {c[2]},
-	  country   {c[3]},
-	  preferred {c[5]}
+	  lang      {memo(c[2])},
+	  country   {memo(c[3])},
+	  preferred {memo(c[5])}
     {}
 }
 

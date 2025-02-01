@@ -30,23 +30,23 @@ namespace dyntaxa {
      * might mean "seen once in 1908".
      */
     struct Distribution {
-	template <class C>
-	explicit Distribution(const C& c);
+	template <class Memo, class C>
+	Distribution(Memo& memo, const C& c);
 
 	const Id id;
-	const std::string country;
-	const std::string cc;
-	const std::string means;
-	const std::string status;
+	const std::string& country;
+	const std::string& cc;
+	const std::string& means;
+	const std::string& status;
     };
 
-    template <class C>
-    Distribution::Distribution(const C& c)
+    template <class Memo, class C>
+    Distribution::Distribution(Memo& memo, const C& c)
 	: id       {c[0]},
-	  country  {c[1]},
-	  cc       {c[2]},
-	  means    {c[3]},
-	  status   {c[4]}
+	  country  {memo(c[1])},
+	  cc       {memo(c[2])},
+	  means    {memo(c[3])},
+	  status   {memo(c[4])}
     {}
 }
 
