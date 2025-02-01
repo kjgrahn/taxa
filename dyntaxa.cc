@@ -138,7 +138,11 @@ void Dyntaxa::list(std::ostream& os, const std::string& taxon) const
 
 void Dyntaxa::list(std::ostream& os, Indent& indent, const Taxon& tx) const
 {
-    for (const Taxon* tx : children(tx)) {
+    auto taxa = children(tx);
+    std::sort(begin(taxa), end(taxa),
+	      [] (auto a, auto b) { return a->name < b->name; });
+
+    for (const Taxon* tx : taxa) {
 
 	names_for(*tx).put(os, indent);
 	list(os, indent, *tx);
