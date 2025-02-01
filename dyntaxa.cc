@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <set>
 
 using dyntaxa::Dyntaxa;
 using dyntaxa::Taxon;
@@ -15,19 +16,32 @@ Dyntaxa::Dyntaxa(std::istream& taxa,
 {
     std::string s;
 
+    /* The only use we have for SpeciesDistribution is weeding out
+     * (pun unintended) taxa absent from Sweden.
+     */
+    std::set<Id> absentees;
+    while (getline(dist, s)) {
+	const auto v = split("\t", s);
+	Distribution val {memo, v};
+	if (absent(val)) {
+	    absentees.insert(val.id);
+	}
+    }
+
     while (getline(taxa, s)) {
 	const auto v = split("\t", s);
 	db.taxa.emplace_back(memo, v);
+
+	// If adding the taxon was premature, remove it again
+	auto& tx = db.taxa.back();
+	if (absentees.count(tx.id) || boring(tx)) {
+	    db.taxa.pop_back();
+	}
     }
 
     while (getline(names, s)) {
 	const auto v = split("\t", s);
 	db.names.emplace_back(memo, v);
-    }
-
-    while (getline(dist, s)) {
-	const auto v = split("\t", s);
-	Distribution val {memo, v};
     }
 
     for (const Taxon& tx : db.taxa) {

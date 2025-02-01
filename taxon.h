@@ -84,6 +84,11 @@ namespace dyntaxa {
     {
 	return tx.id == tx.accepted;
     }
+
+    inline bool boring(const Taxon& tx)
+    {
+	return tx.rank=="cultivar";
+    }
 }
 
 #endif

@@ -48,6 +48,11 @@ namespace dyntaxa {
 	  means    {memo(c[3])},
 	  status   {memo(c[4])}
     {}
+
+    inline bool absent(const Distribution& dist)
+    {
+	return dist.status=="absent";
+    }
 }
 
 #endif
