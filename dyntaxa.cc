@@ -48,6 +48,10 @@ Dyntaxa::Dyntaxa(std::istream& taxa,
 	if (accepted(tx) && tx.parent) {
 	    map.children[tx.parent].push_back(&tx);
 	}
+
+	if (!accepted(tx)) {
+	    map.synonyms[tx.accepted].push_back(&tx);
+	}
     }
 
     for (const Name& name : db.names) {
@@ -112,14 +116,23 @@ std::ostream& Names::put(std::ostream& os,
 	if (it==pit) continue;
 	os << "= " << (*it)->name << '\n';
     }
+    for (auto& syn : synonyms) {
+	indent.ljust(os, "= ", 25) << syn->name << '\n';
+    }
     return os;
 }
 
 Names Dyntaxa::names_for(const Taxon& tx) const
 {
     auto nit = map.names.find(tx.id);
-    if (nit!=end(map.names)) return {tx, {}, nit->second};
-    return {tx, {}, {}};
+    auto sit = map.synonyms.find(tx.id);
+
+    std::vector<const Name*> names;
+    if (nit!=end(map.names)) names = nit->second;
+    std::vector<const Taxon*> synonyms;
+    if (sit!=end(map.synonyms)) synonyms = sit->second;
+
+    return {tx, synonyms, names};
 }
 
 /**

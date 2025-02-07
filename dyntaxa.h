@@ -45,6 +45,7 @@ namespace dyntaxa {
 
 	struct {
 	    std::map<Id, std::vector<const Taxon*>> children;
+	    std::map<Id, std::vector<const Taxon*>> synonyms;
 	    std::map<Id, std::vector<const Name*>> names;
 	} map;
     };
