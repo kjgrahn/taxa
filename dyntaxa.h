@@ -1,5 +1,5 @@
-#ifndef TAXA_DB_H
-#define TAXA_DB_H
+#ifndef TAXA_DYNTAXA_H
+#define TAXA_DYNTAXA_H
 
 #include "taxon.h"
 #include "name.h"
