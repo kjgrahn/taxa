@@ -3,7 +3,7 @@
 .IP \\fB\\$*
 ..
 .
-.TH taxa 1 "JAN 2025" Taxa "User Manuals"
+.TH taxa 1 "FEB 2025" Taxa "User Manuals"
 .SH "NAME"
 taxa \- extract taxon lists from a Darwin Core archive
 .
@@ -121,7 +121,7 @@ In each section, the directly underlying taxa are printed in alphabetic order,
 i.e. sorted by accepted scientific name. Taxa marked as
 .B absent
 in Sweden are skipped; so are
-.B cultivars .
+.BR cultivars .
 .PP
 If there's a preferred swedish name, it's printed on the first line.
 All other important synonyms, scientific and otherwise,
@@ -137,6 +137,43 @@ Then underlying taxa follow, according to the same principles. So subspecies
 appear directly after the species;
 .I Taraxacum
 is arranged into its sections, and so on.
+.
+.
+.SS "Data quality"
+.
+If you investigate the data, you find unnecessary or uninteresting names.
+I have found these patterns and deviations:
+.IP \- 3x
+Hybrids being specified by the letter x rather than the multiplication sign ×.
+I choose the correct character.
+.PD 0
+.IP \-
+.I ssp.
+versus
+.I subsp.
+I choose the former because that's what I'm used to and for aesthetical reasons.
+Artportalen chooses the latter.
+.IP \-
+Hybrid ordering:
+.I "foo × bar"
+versus
+.IR "bar × foo" .
+It's not clear to me whether these mean the same thing everywhere, and I'm too
+lazy to check.
+.IP \-
+Misspellings, and different ways to avoid using accented characters.
+.IP \-
+Archaic scientific names, which haven't been used in the literature in my lifetime.
+Hard to tell how common this is; it may vary in different parts of the input.
+.IP \-
+Capitalization. Some major sources of alternate names apparently capitalize
+all names. It's not possible to compensate for this without damaging names where
+capitalization is proper.
+.IP \-
+Pointless swedish names, like names for races of birds.
+.PD
+.PP
+Except as noted, there is nothing I can do about this.
 .
 .
 .SH "OPTIONS"
