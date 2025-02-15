@@ -9,11 +9,13 @@ taxa \- extract taxon lists from a Darwin Core archive
 .
 .SH "SYNOPSIS"
 .B taxa
+.RB [ \-0 ]
 .I src-dir
 .I taxon
 \&...
 .br
 .B taxa
+.RB [ \-0 ]
 .B --taxa
 .I file
 .B --names
@@ -65,6 +67,11 @@ DwC-A is defined, I suppose, as an MS-DOS ZIP file, but since that's an inconven
 format in many ways,
 .B taxa
 assumes it has been unpacked into several CSV files.
+It uses three of these:
+.BR Taxon.csv ,
+.B VernacularName.csv
+and
+.BR SpeciesDistribution.csv .
 .
 .
 .SS "The data model"
@@ -177,6 +184,9 @@ Except as noted, there is nothing I can do about this.
 .
 .
 .SH "OPTIONS"
+.
+.BP \-0
+Don't recurse; just print all immediate child taxa.
 .
 .BP --taxa\ \fIfile
 .BR Taxon.csv .

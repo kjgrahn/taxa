@@ -137,3 +137,27 @@ void Dyntaxa::list(std::ostream& os, Indent& indent, const Taxon& tx) const
 	list(os, indent, *tx);
     }
 }
+
+/**
+ * Render a non-recursive taxon list for everything important directly
+ * under taxon.
+ */
+void Dyntaxa::flat(std::ostream& os, const std::string& taxon) const
+{
+    os << "# " << taxon << '\n';
+    const Taxon* tx = find_taxon(taxon);
+    if (!tx) return;
+
+    auto taxa = children(*tx);
+    std::sort(begin(taxa), end(taxa),
+	      [] (auto a, auto b) { return a->name < b->name; });
+
+    Indent indent;
+
+    for (const Taxon* tx : taxa) {
+
+	names_for(*tx).put(os, indent);
+    }
+
+    os << '\n';
+}

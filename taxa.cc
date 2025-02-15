@@ -53,14 +53,14 @@ int main(int argc, char** argv)
     const std::string prog = argv[0] ? argv[0] : "taxa";
     const std::string usage = "usage: "
 	+ prog +
-	" src-dir taxon ...\n"
+	" [-0] src-dir taxon ...\n"
 	"       "
-	+ prog + " --taxa file --names file --dist file taxon ...\n" +
+	+ prog + " [-0] --taxa file --names file --dist file taxon ...\n" +
 	"       "
 	+ prog + " --help\n" +
 	"       "
 	+ prog + " --version";
-    const char optstring[] = "";
+    const char optstring[] = "0";
     const struct option long_options[] = {
 	{"taxa",	 1, 0, 'X'},
 	{"names",	 1, 0, 'N'},
@@ -76,12 +76,16 @@ int main(int argc, char** argv)
 	    std::string names;
 	    std::string dist;
 	} file;
+	bool flat = false;
     } arg;
 
     int ch;
     while ((ch = getopt_long(argc, argv,
 			     optstring, long_options, 0)) != -1) {
 	switch(ch) {
+	case '0':
+	    arg.flat = true;
+	    break;
 	case 'X':
 	    arg.file.taxa = optarg;
 	    break;
@@ -132,7 +136,14 @@ int main(int argc, char** argv)
     try {
 	dyntaxa::Dyntaxa dt = mktaxa(std::cerr, arg.file);
 
-	for (auto tx : args) dt.list(std::cout, tx);
+	for (auto tx : args) {
+	    if (arg.flat) {
+		dt.flat(std::cout, tx);
+	    }
+	    else {
+		dt.list(std::cout, tx);
+	    }
+	}
 
 	return 0;
     }

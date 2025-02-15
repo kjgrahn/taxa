@@ -28,6 +28,7 @@ namespace dyntaxa {
 	Dyntaxa& operator= (const Dyntaxa&) = delete;
 
 	void list(std::ostream& os, const std::string& taxon) const;
+	void flat(std::ostream& os, const std::string& taxon) const;
 
     private:
 	const Taxon* find_taxon(const std::string& name) const;
