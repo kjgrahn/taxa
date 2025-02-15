@@ -24,7 +24,8 @@ namespace {
     }
 
     template <class Arg>
-    dyntaxa::Dyntaxa mktaxa(std::ostream& err, const Arg& arg)
+    dyntaxa::Dyntaxa mktaxa(std::ostream& err, const Arg& arg,
+			    bool synonyms)
     {
 	auto complain = [&] (const std::string& name) {
 	    err << "error: cannot open '" << name << "' for reading: "
@@ -41,7 +42,7 @@ namespace {
 
 	if (!(taxa && names && dist)) throw FatalError {};
 
-	return {taxa, names, dist};
+	return {taxa, names, dist, synonyms};
     }
 }
 
@@ -53,14 +54,14 @@ int main(int argc, char** argv)
     const std::string prog = argv[0] ? argv[0] : "taxa";
     const std::string usage = "usage: "
 	+ prog +
-	" [-0] src-dir taxon ...\n"
+	" [-n0] src-dir taxon ...\n"
 	"       "
-	+ prog + " [-0] --taxa file --names file --dist file taxon ...\n" +
+	+ prog + " [-n0] --taxa file --names file --dist file taxon ...\n" +
 	"       "
 	+ prog + " --help\n" +
 	"       "
 	+ prog + " --version";
-    const char optstring[] = "0";
+    const char optstring[] = "n0";
     const struct option long_options[] = {
 	{"taxa",	 1, 0, 'X'},
 	{"names",	 1, 0, 'N'},
@@ -76,6 +77,7 @@ int main(int argc, char** argv)
 	    std::string names;
 	    std::string dist;
 	} file;
+	bool synonyms = true;
 	bool flat = false;
     } arg;
 
@@ -83,6 +85,9 @@ int main(int argc, char** argv)
     while ((ch = getopt_long(argc, argv,
 			     optstring, long_options, 0)) != -1) {
 	switch(ch) {
+	case 'n':
+	    arg.synonyms = false;
+	    break;
 	case '0':
 	    arg.flat = true;
 	    break;
@@ -134,7 +139,7 @@ int main(int argc, char** argv)
     const std::vector<const char*> args {argv + optind, argv + argc };
 
     try {
-	dyntaxa::Dyntaxa dt = mktaxa(std::cerr, arg.file);
+	dyntaxa::Dyntaxa dt = mktaxa(std::cerr, arg.file, arg.synonyms);
 
 	for (auto tx : args) {
 	    if (arg.flat) {

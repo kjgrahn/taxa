@@ -21,7 +21,8 @@ namespace dyntaxa {
     public:
 	Dyntaxa(std::istream& taxa,
 		std::istream& names,
-		std::istream& dist);
+		std::istream& dist,
+		bool use_synonyms);
 
 	Dyntaxa(const Dyntaxa&) = delete;
 	Dyntaxa& operator= (Dyntaxa&&) = default;
@@ -37,6 +38,7 @@ namespace dyntaxa {
 
 	void list(std::ostream& os, Indent& indent, const Taxon& taxon) const;
 
+	const bool use_synonyms;
 	Memo<std::string> memo;
 
 	struct {

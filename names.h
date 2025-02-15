@@ -22,7 +22,8 @@ namespace dyntaxa {
 	const std::vector<const Name*> names;
 
 	std::ostream& put(std::ostream& os,
-			  Indent& indent) const;
+			  Indent& indent,
+			  bool use_synonyms) const;
     };
 }
 #endif

@@ -9,13 +9,13 @@ taxa \- extract taxon lists from a Darwin Core archive
 .
 .SH "SYNOPSIS"
 .B taxa
-.RB [ \-0 ]
+.RB [ \-n0 ]
 .I src-dir
 .I taxon
 \&...
 .br
 .B taxa
-.RB [ \-0 ]
+.RB [ \-n0 ]
 .B --taxa
 .I file
 .B --names
@@ -61,6 +61,8 @@ and defined in
 What's printed is every defined taxon under
 .IR taxon ,
 such as all genera, sections, species and subspecies in a plant family.
+Also, for each taxon, all its documented synonyms.
+The taxa are sorted by scientific name.
 .
 .PP
 DwC-A is defined, I suppose, as an MS-DOS ZIP file, but since that's an inconvenient
@@ -184,6 +186,10 @@ Except as noted, there is nothing I can do about this.
 .
 .
 .SH "OPTIONS"
+.
+.BP \-n
+Don't list synonyms, just the accepted scientific name and (if available) the preferred
+swedish name.
 .
 .BP \-0
 Don't recurse; just print all immediate child taxa.

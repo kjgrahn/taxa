@@ -36,7 +36,8 @@ namespace {
 }
 
 std::ostream& Names::put(std::ostream& os,
-			 Indent& indent) const
+			 Indent& indent,
+			 bool use_synonyms) const
 {
     auto is_preferred = [] (auto name) { return name->preferred=="true"; };
 
@@ -57,6 +58,8 @@ std::ostream& Names::put(std::ostream& os,
     else {
 	indent.ljust(os, (*pit)->name, 23) << " (" << name << ")\n";
     }
+
+    if (!use_synonyms) return os;
 
     for (auto it=begin(names); it!=end(names); it++) {
 	if (it==pit) continue;
