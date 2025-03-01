@@ -3,7 +3,7 @@
 .IP \\fB\\$*
 ..
 .
-.TH taxa 1 "FEB 2025" Taxa "User Manuals"
+.TH taxa 1 "MAR 2025" Taxa "User Manuals"
 .SH "NAME"
 taxa \- extract taxon lists from a Darwin Core archive
 .
@@ -121,8 +121,10 @@ More data is present, but this is roughly what's relevant to
 .
 .SS "Taxon lists"
 .
-For each taxon specified, there's a section with a heading. The
-sections appear in the order specified on the command line; this lets
+For each taxon specified on the
+.B taxa
+command line, there's a section with a heading. The
+sections appear in the command line order; this lets
 you get the list in a familiar order (e.g. ferns first and grasses
 last, if that's what you're used to).
 .PP
@@ -138,7 +140,7 @@ appear on the following lines:
 .IP
 .nf
 .ft CW
-paddfot                 (Asperugo procumbens)
+paddfot			(Asperugo procumbens)
 = riva
 .fi
 .PP
@@ -161,7 +163,7 @@ I choose the correct character.
 versus
 .I subsp.
 I choose the former because that's what I'm used to and for aesthetical reasons.
-Artportalen chooses the latter.
+Artdatabanken prefers the latter.
 .IP \-
 Hybrid ordering:
 .I "foo × bar"
@@ -231,4 +233,4 @@ The GNU General Public License (GPL) version 2 or (at your option) version 3.
 .
 .BR groblad_species (5).
 .br
-.RB \[fo] https://metadata.artfakta.se/taxonomiskdata \[fc].
+.RI \[fo] https://artfakta.se/metadata/dyntaxa \[fc].
