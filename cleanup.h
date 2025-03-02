@@ -5,6 +5,6 @@
 #include <iosfwd>
 
 bool cleanup(std::ostream& err, const std::string& name,
-	     const char* a, const char* b);
+	     char* a, char* b);
 
 #endif

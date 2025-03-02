@@ -3,7 +3,7 @@
 .IP \\fB\\$*
 ..
 .
-.TH unpack 1 "JAN 2025" Taxa "User Manuals"
+.TH unpack 1 "MAR 2025" Taxa "User Manuals"
 .SH "NAME"
 unpack \- extract and tidy up a Darwin Core archive
 .
@@ -34,6 +34,8 @@ MS-DOS line endings are removed
 .IP \-
 the dreaded UTF-8 BOM is removed
 .IP \-
+Timestamps are rewritten in ISO format, if necessary.
+.IP \-
 CSV files are sorted on Taxon/TaxonName number.
 .PD
 .
@@ -45,6 +47,14 @@ The CSV sorting, for example, eliminates useless
 rearrangement of lines between versions.
 (Such rearrangement does happen, at the time of this writing.)
 .\" Perhaps they just dump a hash table to file.
+.
+.PP
+The timestamp problem appeared in
+.B  Reference.csv
+in early 2025, and may be a temporary glitch. The main reason I normalize it is,
+as with the ordering, to avoid useless differences between versions.
+.\" 2013-09-04 22:00:00
+.\" 09/04/2013 22:00:00
 .
 .PP
 A Darwin Core Archive is a ZIP file. Reading it from stdin means you can let e.g.
@@ -65,6 +75,7 @@ Print version information and exit.
 J\(:orgen Grahn
 .IR \[fo]grahn@snipabacken.se\[fc] .
 Reading streaming ZIP files appears courtesy of the pleasant
+and well-documented
 .BR libarchive .
 .
 .

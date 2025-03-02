@@ -86,8 +86,8 @@ namespace {
 	while (archive_read_next_header(a, &e) == ARCHIVE_OK) {
 
 	    const std::string name = archive_entry_pathname(e);
-	    const std::string content = read_file(a);
-	    const char* p = content.data();
+	    std::string content = read_file(a);
+	    char* p = content.data();
 
 	    if (!cleanup(std::cerr, name,
 			 p, p + content.size())) return 1;

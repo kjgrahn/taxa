@@ -24,6 +24,71 @@ namespace {
 	return a;
     }
 
+    /* True if [a, b) starts with the string p (but not the \0).
+     * And, 'n' matches [0-9] rather than itself.
+     * This is a cheap alternative to regexes in a very limited
+     * situation.
+     */
+    template <class It>
+    bool match(const char* p, It a, It b)
+    {
+	auto isdigit = [&] (unsigned n) { return std::isdigit(n); };
+	auto mismatch = [&] (char a, char p) {
+	    if (p=='n') return !isdigit(a);
+	    return a != p;
+	};
+
+	while (a!=b && *p) {
+	    if (mismatch(*a, *p)) return false;
+	    a++; p++;
+	}
+	return !*p;
+    }
+
+    /* The iterator points to "mm/dd/yyyy";
+     * change to "yyyy-mm-dd" (which luckily is the same length).
+     */
+    template <class It>
+    void to_iso(It a)
+    {
+	char buf[10];
+	std::copy_n(a, 10, buf);
+	std::copy_n(buf+6, 4, a); a+=4;
+	*a++ = '-';
+	std::copy_n(buf+0, 2, a); a+=2;
+	*a++ = '-';
+	std::copy_n(buf+3, 2, a); a+=2;
+    }
+
+    /**
+     * Replace all
+     *   \tmm/dd/yyyy
+     * with
+     *   \tyyyy-mm-dd
+     *
+     * This is really intended to fix one thing: that in February 2025,
+     * the Reference.csv "date" column suddenly changed to a format using
+     * a legacy US date notation.
+     *
+     * Doesn't take all possible Darwin Core encodings into account.
+     * They accept different encodings, and support ranges, supplying
+     * only the year or year-and-month, and so on. Dyntaxa doesn't use
+     * that freedom.
+     */
+    template <class It>
+    void iso_date(It a, It b)
+    {
+	while (true) {
+	    a = std::find(a, b, '\t');
+	    if (a==b) return;
+
+	    a++;
+	    if (match("nn/nn/nnnn", a, b)) {
+		to_iso(a);
+	    }
+	}
+    }
+
     /**
      * Return the order of the first line of 's'. It's based on the
      * first decimal number on that line, and whether it's
@@ -113,6 +178,22 @@ namespace {
 	}
     }
 
+    namespace ref {
+
+	template <class It>
+	void write(std::ostream& os, It a, It b)
+	{
+	    a = trim_bom(a, b);
+	    iso_date(a, b);
+
+	    auto lines = lines_of(a, b);
+	    std::stable_sort(begin(lines), end(lines));
+	    for (const auto& e : lines) {
+		writeln(os, e.second);
+	    }
+	}
+    }
+
     namespace xml {
 	template <class It>
 	void write(std::ostream& os, It a, It b)
@@ -137,7 +218,7 @@ namespace {
  * to 'err'.
  */
 bool cleanup(std::ostream& err, const std::string& name,
-	     const char* a, const char* b)
+	     char* a, char* b)
 {
     auto whine = [&] (const char* complaint) {
 	err << complaint << ' ' << name << ": "
@@ -150,7 +231,11 @@ bool cleanup(std::ostream& err, const std::string& name,
 	return false;
     }
 
-    if (ends_with(".csv", name)) {
+    if (ends_with("Reference.csv", name)) {
+
+	ref::write(f, a, b);
+    }
+    else if (ends_with(".csv", name)) {
 
 	csv::write(f, a, b);
     }
