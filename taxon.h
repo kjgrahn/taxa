@@ -7,6 +7,8 @@
 namespace dyntaxa {
 
     /**
+     * An entry in Taxon.csv.
+     *
      * taxonId                    190414
      * acceptedNameUsageID        108789
      * parentNameUsageID           29722 never a TaxonName

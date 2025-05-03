@@ -35,6 +35,19 @@ namespace {
     }
 }
 
+/**
+ * True if this is a vernacular name we'd rather not see at all, in
+ * any context, preferred or not. For now, the bird names on the form
+ * "X, rasen Y".
+ */
+bool dyntaxa::boring(const dyntaxa::Name& name)
+{
+    const auto& s = name.name;
+    auto a = s.find(", underarten ");
+    auto b = s.find(", rasen ");
+    return a!=s.npos || b!=s.npos;
+}
+
 std::ostream& Names::put(std::ostream& os,
 			 Indent& indent,
 			 bool use_synonyms) const
@@ -52,7 +65,7 @@ std::ostream& Names::put(std::ostream& os,
     const auto name = normalize(taxon.name);
     seen(name);
 
-    if (pit==end(names)) {
+    if (pit==end(names) || boring(**pit)) {
 	indent.ljust(os, "-", 23) << " (" << name << ")\n";
     }
     else {
@@ -64,7 +77,7 @@ std::ostream& Names::put(std::ostream& os,
     if (!use_synonyms) return os;
 
     for (auto it=begin(names); it!=end(names); it++) {
-	if (it==pit) continue;
+	if (boring(**it)) continue;
 	const auto name = normalize((*it)->name);
 	if (seen(name)) continue;
 	os << "= " << name << '\n';

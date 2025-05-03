@@ -7,6 +7,8 @@
 namespace dyntaxa {
 
     /**
+     * An entry in VernacularName.csv.
+     *
      * taxonId
      * vernacularName
      * language            sv en nb fi da de fo is
@@ -29,7 +31,6 @@ namespace dyntaxa {
 	const std::string name;
 	const std::string& lang;
 	const std::string& country;
-
 	const std::string& preferred;
     };
 
@@ -41,6 +42,8 @@ namespace dyntaxa {
 	  country   {memo(c[3])},
 	  preferred {memo(c[5])}
     {}
+
+    bool boring(const Name&);
 }
 
 #endif

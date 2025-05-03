@@ -3,7 +3,7 @@
 .IP \\fB\\$*
 ..
 .
-.TH taxa 1 "MAR 2025" Taxa "User Manuals"
+.TH taxa 1 "MAY 2025" Taxa "User Manuals"
 .SH "NAME"
 taxa \- extract taxon lists from a Darwin Core archive
 .
@@ -182,6 +182,11 @@ all names. It's not possible to compensate for this without damaging names where
 capitalization is proper.
 .IP \-
 Pointless swedish names, like names for races of birds.
+I choose to ignore names like
+.I "varf\(oagel, rasen excubitor"
+and
+.IR "... underarten excubitor",
+but there might be other forms and these will slip through.
 .PD
 .PP
 Except as noted, there is nothing I can do about this.
