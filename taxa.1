@@ -175,7 +175,7 @@ lazy to check.
 Misspellings, and different ways to avoid using accented characters.
 .IP \-
 Archaic scientific names, which haven't been used in the literature in my lifetime.
-Hard to tell how common this is; it may vary in different parts of the input.
+Hard to tell how common this is; it may vary in different parts of the data set.
 .IP \-
 Capitalization. Some major sources of alternate names apparently capitalize
 all names. It's not possible to compensate for this without damaging names where
@@ -222,6 +222,14 @@ Print a brief help text and exit.
 .
 .BP --version
 Print version information and exit.
+.
+.
+.SH "BUGS"
+.
+.IP \- 3x
+Genus names aren't unique across kingdoms, so e.g.
+.I "taxa src Prunella"
+will list the genus of birds, never the vascular plant genus.
 .
 .
 .SH "AUTHOR"
