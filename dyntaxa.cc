@@ -66,11 +66,15 @@ Dyntaxa::Dyntaxa(std::istream& taxa,
 
 /**
  * A taxon with scientificName 'name', or null.
+ * Or, rather, the first accepted taxon, if several match.
  */
 const Taxon* Dyntaxa::find_taxon(const std::string& name) const
 {
-    auto it = std::find_if(db.taxa.begin(), db.taxa.end(),
-			   [&] (auto& tx) { return tx.name==name; });
+    auto p = [&name] (auto& tx) {
+	return tx.name==name && accepted(tx);
+    };
+
+    auto it = std::find_if(db.taxa.begin(), db.taxa.end(), p);
     if (it==db.taxa.end()) return {};
     return &*it;
 }
