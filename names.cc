@@ -56,7 +56,9 @@ std::ostream& Names::put(std::ostream& os,
 	indent.ljust(os, "-", 23) << " (" << name << ")\n";
     }
     else {
-	indent.ljust(os, (*pit)->name, 23) << " (" << name << ")\n";
+	const auto pname = normalize((*pit)->name);
+	seen(pname);
+	indent.ljust(os, pname, 23) << " (" << name << ")\n";
     }
 
     if (!use_synonyms) return os;
