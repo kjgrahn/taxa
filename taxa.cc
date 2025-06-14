@@ -24,25 +24,24 @@ namespace {
     }
 
     template <class Arg>
-    dyntaxa::Dyntaxa mktaxa(std::ostream& err, const Arg& arg,
-			    bool synonyms)
+    dyntaxa::Dyntaxa mktaxa(std::ostream& err, const Arg& arg)
     {
 	auto complain = [&] (const std::string& name) {
 	    err << "error: cannot open '" << name << "' for reading: "
 		<< std::strerror(errno) << '\n';
 	};
 
-	std::ifstream taxa {arg.taxa};
-	std::ifstream names {arg.names};
-	std::ifstream dist {arg.dist};
+	std::ifstream taxa {arg.file.taxa};
+	std::ifstream names {arg.file.names};
+	std::ifstream dist {arg.file.dist};
 
-	if (!taxa)  complain(arg.taxa);
-	if (!names) complain(arg.names);
-	if (!dist)  complain(arg.dist);
+	if (!taxa)  complain(arg.file.taxa);
+	if (!names) complain(arg.file.names);
+	if (!dist)  complain(arg.file.dist);
 
 	if (!(taxa && names && dist)) throw FatalError {};
 
-	return {taxa, names, dist, synonyms};
+	return {taxa, names, dist, arg.synonyms, arg.genera};
     }
 }
 
@@ -54,14 +53,14 @@ int main(int argc, char** argv)
     const std::string prog = argv[0] ? argv[0] : "taxa";
     const std::string usage = "usage: "
 	+ prog +
-	" [-n0] src-dir taxon ...\n"
+	" [-ng0] src-dir taxon ...\n"
 	"       "
-	+ prog + " [-n0] --taxa file --names file --dist file taxon ...\n" +
+	+ prog + " [-ng0] --taxa file --names file --dist file taxon ...\n" +
 	"       "
 	+ prog + " --help\n" +
 	"       "
 	+ prog + " --version";
-    const char optstring[] = "n0";
+    const char optstring[] = "ng0";
     const struct option long_options[] = {
 	{"taxa",	 1, 0, 'X'},
 	{"names",	 1, 0, 'N'},
@@ -78,6 +77,7 @@ int main(int argc, char** argv)
 	    std::string dist;
 	} file;
 	bool synonyms = true;
+	bool genera = true;
 	bool flat = false;
     } arg;
 
@@ -90,6 +90,9 @@ int main(int argc, char** argv)
 	    break;
 	case '0':
 	    arg.flat = true;
+	    break;
+	case 'g':
+	    arg.genera = false;
 	    break;
 	case 'X':
 	    arg.file.taxa = optarg;
@@ -139,7 +142,7 @@ int main(int argc, char** argv)
     const std::vector<const char*> args {argv + optind, argv + argc };
 
     try {
-	dyntaxa::Dyntaxa dt = mktaxa(std::cerr, arg.file, arg.synonyms);
+	dyntaxa::Dyntaxa dt = mktaxa(std::cerr, arg);
 
 	for (auto tx : args) {
 	    if (arg.flat) {

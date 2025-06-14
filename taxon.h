@@ -91,6 +91,11 @@ namespace dyntaxa {
     {
 	return tx.rank=="cultivar";
     }
+
+    inline bool genus(const Taxon& tx)
+    {
+	return tx.rank=="genus";
+    }
 }
 
 #endif

@@ -14,8 +14,10 @@ using dyntaxa::Taxon;
 Dyntaxa::Dyntaxa(std::istream& taxa,
 		 std::istream& names,
 		 std::istream& dist,
-		 bool use_synonyms)
-    : use_synonyms {use_synonyms}
+		 bool use_synonyms,
+		 bool list_genera)
+    : use_synonyms {use_synonyms},
+      list_genera {list_genera}
 {
     std::string s;
 
@@ -139,7 +141,9 @@ void Dyntaxa::list(std::ostream& os, Indent& indent, const Taxon& tx) const
 
     for (const Taxon* tx : taxa) {
 
-	names_for(*tx).put(os, indent, use_synonyms);
+	if (list_genera || !genus(*tx)) {
+	    names_for(*tx).put(os, indent, use_synonyms);
+	}
 	list(os, indent, *tx);
     }
 }
@@ -162,7 +166,9 @@ void Dyntaxa::flat(std::ostream& os, const std::string& taxon) const
 
     for (const Taxon* tx : taxa) {
 
-	names_for(*tx).put(os, indent, use_synonyms);
+	if (list_genera || !genus(*tx)) {
+	    names_for(*tx).put(os, indent, use_synonyms);
+	}
     }
 
     os << '\n';

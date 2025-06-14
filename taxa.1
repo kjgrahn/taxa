@@ -3,19 +3,19 @@
 .IP \\fB\\$*
 ..
 .
-.TH taxa 1 "MAY 2025" Taxa "User Manuals"
+.TH taxa 1 "JUN 2025" Taxa "User Manuals"
 .SH "NAME"
 taxa \- extract taxon lists from a Darwin Core archive
 .
 .SH "SYNOPSIS"
 .B taxa
-.RB [ \-n0 ]
+.RB [ \-ng0 ]
 .I src-dir
 .I taxon
 \&...
 .br
 .B taxa
-.RB [ \-n0 ]
+.RB [ \-ng0 ]
 .B --taxa
 .I file
 .B --names
@@ -44,6 +44,7 @@ and prints flat taxon lists, e.g.
 .ft CW
 # Solanaceae
 belladonna		(Atropa bella-donna)
+spikklubbor             (Datura)
 indisk spikklubba	(Datura metel)
 spikklubba		(Datura stramonium)
 \&...
@@ -197,6 +198,13 @@ Except as noted, there is nothing I can do about this.
 .BP \-n
 Don't list synonyms, just the accepted scientific name and (if available) the preferred
 swedish name.
+.
+.BP \-g
+Don't print genera. Genus entries tend to be numerous and superfluous:
+if a genus is elegible for inclusion, it's usually because species follow, and the
+genus is implicitly included, too; see
+.BR groblad_species (5).
+The only piece of information lost is the swedish name for the genus.
 .
 .BP \-0
 Don't recurse; just print all immediate child taxa.
