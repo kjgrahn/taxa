@@ -6,10 +6,11 @@
 
 #include <iostream>
 #include <algorithm>
-#include <set>
+#include <unordered_set>
 
 using dyntaxa::Dyntaxa;
 using dyntaxa::Taxon;
+using dyntaxa::Seen;
 
 Dyntaxa::Dyntaxa(std::istream& taxa,
 		 std::istream& names,
@@ -24,7 +25,7 @@ Dyntaxa::Dyntaxa(std::istream& taxa,
     /* The only use we have for SpeciesDistribution is weeding out
      * (pun unintended) taxa absent from Sweden.
      */
-    std::set<Id> absentees;
+    std::unordered_set<Id> absentees;
     while (getline(dist, s)) {
 	const auto v = split("\t", s);
 	Distribution val {memo, v};
@@ -107,7 +108,7 @@ dyntaxa::Names Dyntaxa::names_for(const Taxon& tx) const
 
 /**
  * Render a taxon list for everything important under taxon (usually a
- * family). Recursively.
+ * family) except things seen already. Do this recursively.
  *
  *   # Boraginaceae
  *   -			 (Adelocaryum coelestinum)
@@ -122,18 +123,21 @@ dyntaxa::Names Dyntaxa::names_for(const Taxon& tx) const
  *   ...
  *
  */
-void Dyntaxa::list(std::ostream& os, const std::string& taxon) const
+void Dyntaxa::list(std::ostream& os, Seen<dyntaxa::Id>& seen,
+		   const std::string& taxon) const
 {
     os << "# " << taxon << '\n';
     const Taxon* tx = find_taxon(taxon);
     if (!tx) return;
 
     Indent indent;
-    list(os, indent, *tx);
+    seen(tx->id);
+    list(os, seen, indent, *tx);
     os << '\n';
 }
 
-void Dyntaxa::list(std::ostream& os, Indent& indent, const Taxon& tx) const
+void Dyntaxa::list(std::ostream& os, Seen<dyntaxa::Id>& seen, Indent& indent,
+		   const Taxon& tx) const
 {
     auto taxa = children(tx);
     std::sort(begin(taxa), end(taxa),
@@ -141,10 +145,12 @@ void Dyntaxa::list(std::ostream& os, Indent& indent, const Taxon& tx) const
 
     for (const Taxon* tx : taxa) {
 
+	if (seen(tx->id)) continue;
+
 	if (list_genera || !genus(*tx)) {
 	    names_for(*tx).put(os, indent, use_synonyms);
 	}
-	list(os, indent, *tx);
+	list(os, seen, indent, *tx);
     }
 }
 
@@ -152,7 +158,8 @@ void Dyntaxa::list(std::ostream& os, Indent& indent, const Taxon& tx) const
  * Render a non-recursive taxon list for everything important directly
  * under taxon.
  */
-void Dyntaxa::flat(std::ostream& os, const std::string& taxon) const
+void Dyntaxa::flat(std::ostream& os, Seen<dyntaxa::Id>& seen,
+		   const std::string& taxon) const
 {
     os << "# " << taxon << '\n';
     const Taxon* tx = find_taxon(taxon);
@@ -165,6 +172,8 @@ void Dyntaxa::flat(std::ostream& os, const std::string& taxon) const
     Indent indent;
 
     for (const Taxon* tx : taxa) {
+
+	if (seen(tx->id)) continue;
 
 	if (list_genera || !genus(*tx)) {
 	    names_for(*tx).put(os, indent, use_synonyms);

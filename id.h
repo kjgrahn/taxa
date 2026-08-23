@@ -24,10 +24,20 @@ namespace dyntaxa {
 	bool operator== (const Id& other) const { return val==other.val; }
 	bool operator<  (const Id& other) const { return val < other.val; }
 	explicit operator bool () const { return val.first; }
+	std::size_t hash() const noexcept { return val.second; }
 
     private:
 	std::pair<char, unsigned> val;
     };
 }
+
+template<>
+struct std::hash<dyntaxa::Id>
+{
+    std::size_t operator()(const dyntaxa::Id& val) const noexcept
+    {
+        return val.hash();
+    }
+};
 
 #endif

@@ -10,6 +10,7 @@
 #include <iosfwd>
 
 #include "memo.h"
+#include "seen.h"
 
 class Indent;
 
@@ -25,19 +26,15 @@ namespace dyntaxa {
 		bool use_synonyms,
 		bool list_genera);
 
-	Dyntaxa(const Dyntaxa&) = delete;
-	Dyntaxa& operator= (Dyntaxa&&) = default;
-	Dyntaxa& operator= (const Dyntaxa&) = delete;
-
-	void list(std::ostream& os, const std::string& taxon) const;
-	void flat(std::ostream& os, const std::string& taxon) const;
+	void list(std::ostream&, Seen<Id>&, const std::string& taxon) const;
+	void flat(std::ostream&, Seen<Id>&, const std::string& taxon) const;
 
     private:
 	const Taxon* find_taxon(const std::string& name) const;
 	std::vector<const Taxon*> children(const Taxon& tx) const;
 	Names names_for(const Taxon& tx) const;
 
-	void list(std::ostream& os, Indent& indent, const Taxon& taxon) const;
+	void list(std::ostream&, Seen<Id>&, Indent&, const Taxon& taxon) const;
 
 	const bool use_synonyms;
 	const bool list_genera;

@@ -3,7 +3,7 @@
 .IP \\fB\\$*
 ..
 .
-.TH taxa 1 "JUN 2025" Taxa "User Manuals"
+.TH taxa 1 "AUG 2026" Taxa "User Manuals"
 .SH "NAME"
 taxa \- extract taxon lists from a Darwin Core archive
 .
@@ -59,7 +59,7 @@ and defined in
 .BR groblad_species (5).
 .
 .PP
-What's printed is every defined taxon under
+What's printed is every defined taxon under each listed
 .IR taxon ,
 such as all genera, sections, species and subspecies in a plant family.
 Also, for each taxon, all its documented synonyms.
@@ -149,6 +149,21 @@ Then underlying taxa follow, according to the same principles. So subspecies
 appear directly after the species;
 .I Taraxacum
 is arranged into its sections, and so on.
+.
+.PP
+A taxon is not listed twice, so you can ask for e.g.
+.IP
+.nf
+Lycopodiaceae
+Selaginellaceae
+\&...
+Cyperaceae
+Poaceae
+\fBTracheophyta\fP
+.fi
+.PP
+and all vascular plant families will be included, most of them sorted in the
+order you prefer.
 .
 .
 .SS "Data quality"

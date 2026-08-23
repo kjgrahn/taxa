@@ -143,13 +143,14 @@ int main(int argc, char** argv)
 
     try {
 	dyntaxa::Dyntaxa dt = mktaxa(std::cerr, arg);
+	dyntaxa::Seen<dyntaxa::Id> seen;
 
 	for (auto tx : args) {
 	    if (arg.flat) {
-		dt.flat(std::cout, tx);
+		dt.flat(std::cout, seen, tx);
 	    }
 	    else {
-		dt.list(std::cout, tx);
+		dt.list(std::cout, seen, tx);
 	    }
 	}
 
