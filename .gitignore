@@ -1,4 +1,6 @@
 *.zip
+utf8/*
+latin1/*
 taxa
 unpack
 *.o

@@ -1,12 +1,14 @@
-all: Tracheophyta
-all: Aves
-all: Amphibia
-all: Mammalia
-all: Reptilia
-all: Insecta
+all: utf8/Tracheophyta  latin1/Tracheophyta
+
+latin1/%: utf8/%
+	iconv -futf8 -t latin1//TRANSLIT $< >$@
+
+utf8/%: gen/% taxa
+	grep -v ^\# $< | xargs ./taxa -ng dwc >$@
 
 .PHONY: update
 # see https://www.gbif.org/dataset/de8934f4-a136-481c-a87a-b0b202b80a31
+# The "subscription key" is public information.
 update: unpack
 	curl -fL \
 	"https://api.artdatabanken.se/taxonservice/v1/DarwinCore/Download?subscription-key=4b068709e7f2427d9fc76bf42d8e2b57" \
