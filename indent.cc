@@ -114,6 +114,24 @@ std::ostream& Indent::ljust(std::ostream& os, const std::string& s,
     return spacer(os << s, ss, n);
 }
 
+/**
+ * Like ljust(), but ensure the text ends with whitespace. This is
+ * useful when you mustn't let overlong texts flow together, because
+ * the output needs to be space-separated. For example:
+ *
+ *   foo      bar        normal case
+ *   foobar   baz
+ *   foobarbaz barney    overlong column
+ *
+ */
+std::ostream& Indent::ljust_sp(std::ostream& os, const std::string& s,
+			       const size_t n)
+{
+    const size_t ss = measure(s);
+    spacer(os << s, ss, n);
+    if (n <= ss) os.put(' ');
+    return os;
+}
 
 /**
  * Print 's' preceded by enough whitespace to make the width 'n'.

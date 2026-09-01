@@ -23,6 +23,8 @@ public:
 
     std::ostream& ljust(std::ostream& os, const std::string& s,
 			const size_t n);
+    std::ostream& ljust_sp(std::ostream& os, const std::string& s,
+			   size_t n);
     std::ostream& rjust(std::ostream& os, const std::string& s,
 			const size_t n);
 

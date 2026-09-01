@@ -66,12 +66,12 @@ std::ostream& Names::put(std::ostream& os,
     seen(name);
 
     if (pit==end(names) || boring(**pit)) {
-	indent.ljust(os, "-", 23) << " (" << name << ")\n";
+	indent.ljust_sp(os, "-", 24) << '(' << name << ")\n";
     }
     else {
 	const auto pname = normalize((*pit)->name);
 	seen(pname);
-	indent.ljust(os, pname, 23) << " (" << name << ")\n";
+	indent.ljust_sp(os, pname, 24) << '(' << name << ")\n";
     }
 
     if (!use_synonyms) return os;
