@@ -36,6 +36,16 @@ namespace {
 }
 
 /**
+ * Assuming it's the name of an aggregate, remove any ad-hoc textual
+ * markers from it. This might of course make the name a duplicate.
+ */
+void dyntaxa::Name::unaggregate()
+{
+    replace(name, " (aggregat)", "");
+    replace(name, " agg.",       "");
+}
+
+/**
  * True if this is a vernacular name we'd rather not see at all, in
  * any context, preferred or not. For now, the bird names on the form
  * "X, rasen Y".
@@ -48,11 +58,16 @@ bool dyntaxa::boring(const dyntaxa::Name& name)
     return a!=s.npos || b!=s.npos;
 }
 
+bool dyntaxa::preferred(const dyntaxa::Name& name)
+{
+    return name.preferred=="true";
+}
+
 std::ostream& Names::put(std::ostream& os,
 			 Indent& indent,
 			 bool use_synonyms) const
 {
-    auto is_preferred = [] (auto name) { return name->preferred=="true"; };
+    auto is_preferred = [] (auto* name) { return preferred(*name); };
 
     std::unordered_set<std::string> mem;
     auto seen = [&mem] (auto s) {

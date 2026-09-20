@@ -100,6 +100,11 @@ namespace dyntaxa {
     {
 	return tx.rank=="genus";
     }
+
+    inline bool aggregate(const Taxon& tx)
+    {
+	return tx.rank=="speciesAggregate";
+    }
 }
 
 #endif

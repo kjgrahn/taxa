@@ -41,7 +41,8 @@ namespace {
 
 	if (!(taxa && names && dist)) throw FatalError {};
 
-	return {taxa, names, dist, arg.synonyms, arg.genera};
+	return {taxa, names, dist,
+		arg.synonyms, arg.wash_aggregates, arg.genera};
     }
 }
 
@@ -53,14 +54,14 @@ int main(int argc, char** argv)
     const std::string prog = argv[0] ? argv[0] : "taxa";
     const std::string usage = "usage: "
 	+ prog +
-	" [-ng0] src-dir taxon ...\n"
+	" [-nga0] src-dir taxon ...\n"
 	"       "
-	+ prog + " [-ng0] --taxa file --names file --dist file taxon ...\n" +
+	+ prog + " [-nga0] --taxa file --names file --dist file taxon ...\n" +
 	"       "
 	+ prog + " --help\n" +
 	"       "
 	+ prog + " --version";
-    const char optstring[] = "ng0";
+    const char optstring[] = "nga0";
     const struct option long_options[] = {
 	{"taxa",	 1, 0, 'X'},
 	{"names",	 1, 0, 'N'},
@@ -78,6 +79,7 @@ int main(int argc, char** argv)
 	} file;
 	bool synonyms = true;
 	bool genera = true;
+	bool wash_aggregates = false;
 	bool flat = false;
     } arg;
 
@@ -88,6 +90,7 @@ int main(int argc, char** argv)
 	case 'n': arg.synonyms = false;		break;
 	case '0': arg.flat = true;		break;
 	case 'g': arg.genera = false;		break;
+	case 'a': arg.wash_aggregates = true;	break;
 	case 'X': arg.file.taxa = optarg;	break;
 	case 'N': arg.file.names = optarg;	break;
 	case 'D': arg.file.dist = optarg;	break;
@@ -96,7 +99,7 @@ int main(int argc, char** argv)
 	    return 0;
 	case 'v':
 	    std::cout << prog << ", part of taxa " << version() << '\n'
-		      << "Copyright (c) 2025 Jörgen Grahn\n";
+		      << "Copyright (c) 2025, 2026 Jörgen Grahn\n";
 	    return 0;
 	    break;
 	case ':':

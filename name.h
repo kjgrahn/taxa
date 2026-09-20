@@ -28,8 +28,10 @@ namespace dyntaxa {
 	template <class Memo, class C>
 	Name(Memo& memo, const C& c);
 
+	void unaggregate();
+
 	const Id id;
-	const std::string name;
+	      std::string name;
 	const std::string& lang;
 	const std::string& country;
 	const std::string& preferred;
@@ -45,6 +47,7 @@ namespace dyntaxa {
     {}
 
     bool boring(const Name&);
+    bool preferred(const Name&);
 }
 
 #endif

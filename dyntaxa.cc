@@ -10,14 +10,64 @@
 
 using dyntaxa::Dyntaxa;
 using dyntaxa::Taxon;
+using dyntaxa::Name;
 using dyntaxa::Seen;
+using dyntaxa::Id;
+
+namespace {
+
+    /* A data structure for temporary Id->Taxon lookup.
+     * The input vector must not change during use.
+     */
+    class ById {
+    public:
+	explicit ById(const std::vector<Taxon>& v);
+	const Taxon* find(Id) const;
+
+    private:
+	const std::vector<Taxon>& v;
+	std::map<Id, unsigned> map;
+    };
+
+    ById::ById(const std::vector<Taxon>& v)
+	: v {v}
+    {
+	unsigned n = 0;
+	for (auto& tx : v) {
+	    map[tx.id] = n++;
+	}
+    }
+
+    const Taxon* ById::find(const Id id) const
+    {
+	auto it = map.find(id);
+	if (it==map.end()) return {};
+	unsigned n = it->second;
+	return &v[n];
+    }
+
+    /* True if the name occurs more than once in a set of Names.
+     * If 'preferred', only look at preferred names.
+     */
+    template <class V>
+    bool duplicated(const V& v, const Name& name, bool use_synonyms)
+    {
+	auto n = std::count_if(begin(v), end(v), [&] (const Name& other) {
+	    if (use_synonyms) return other.name==name.name;
+	    return preferred(other) && other.name==name.name;
+	});
+	return n > 1;
+    }
+}
 
 Dyntaxa::Dyntaxa(std::istream& taxa,
 		 std::istream& names,
 		 std::istream& dist,
 		 bool use_synonyms,
+		 bool wash_aggregates,
 		 bool list_genera)
     : use_synonyms {use_synonyms},
+      wash_aggregates {wash_aggregates},
       list_genera {list_genera}
 {
     std::string s;
@@ -45,9 +95,27 @@ Dyntaxa::Dyntaxa(std::istream& taxa,
 	}
     }
 
+    const ById by_id {db.taxa};
+
     while (getline(names, s)) {
 	const auto v = split("\t", s);
 	db.names.emplace_back(memo, v);
+
+	// Possibly tweak the name, or remove it again
+	auto& name = db.names.back();
+
+	if (name.lang!="sv") {
+	    db.names.pop_back();
+	    continue;
+	}
+
+	const auto* const tx = by_id.find(name.id);
+	if (!tx) {
+	    db.names.pop_back();
+	    continue;
+	}
+
+	if (wash_aggregates && aggregate(*tx)) name.unaggregate();
     }
 
     for (const Taxon& tx : db.taxa) {
@@ -61,9 +129,13 @@ Dyntaxa::Dyntaxa(std::istream& taxa,
     }
 
     for (const Name& name : db.names) {
-	if (name.lang=="sv") {
-	    map.names[name.id].push_back(&name);
+
+	if (wash_aggregates) {
+	    const auto* const tx = by_id.find(name.id);
+	    if (aggregate(*tx) && duplicated(db.names, name, use_synonyms)) continue;
 	}
+
+	map.names[name.id].push_back(&name);
     }
 }
 

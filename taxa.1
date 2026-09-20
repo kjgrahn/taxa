@@ -3,19 +3,19 @@
 .IP \\fB\\$*
 ..
 .
-.TH taxa 1 "AUG 2026" Taxa "User Manuals"
+.TH taxa 1 "OCT 2026" Taxa "User Manuals"
 .SH "NAME"
 taxa \- extract taxon lists from a Darwin Core archive
 .
 .SH "SYNOPSIS"
 .B taxa
-.RB [ \-ng0 ]
+.RB [ \-nga0 ]
 .I src-dir
 .I taxon
 \&...
 .br
 .B taxa
-.RB [ \-ng0 ]
+.RB [ \-nga0 ]
 .B --taxa
 .I file
 .B --names
@@ -213,6 +213,38 @@ but there might be other forms and these will slip through.
 Except as noted, there is nothing I can do about this.
 .
 .
+.SS "Aggregates"
+.
+For at least vascular plants, mosses, fungi and lichens, there are aggregate taxa. Frequently,
+they have vernacular names, and these names contain
+.I (aggregat)
+or
+.I agg.
+to give a hint that these aren't real taxa.
+For example:
+.IP
+.nf
+.ft CW
+lopplummer (aggregat)   (Huperzia selago agg.)
+k\(:arrviol                (Viola palustris)
+k\(:arrviol (aggregat)     (Viola palustris agg.)
+bananspindling agg.
+.fi
+.PP
+There seem to be varying reasons for the aggregate taxa. A species
+might have been split, or an important data source lumped two species for simplicity,
+or I suppose some species are so hard to tell apart that nobody
+bothers. So there was valuable data available, and the only way to
+make it accessible was to invent an aggregate.
+.PP
+Many of the aggregates are
+difficult to use because you have to find out which species they
+contain.
+.I "Viola palustris agg."
+for example contains V. palustris and epipsila, according to
+.IR Artfakta .
+.
+.
 .SH "OPTIONS"
 .
 .BP \-n
@@ -225,6 +257,17 @@ if a genus is elegible for inclusion, it's usually because species follow, and t
 genus is implicitly included, too; see
 .BR groblad_species (5).
 The only piece of information lost is the swedish name for the genus.
+.
+.BP \-a
+Don't mark swedish names as aggregates; remove any
+.B "(aggregat)"
+or
+.B "agg."
+markers. If this would create duplicate names, don't name the
+aggregate at all.
+.BP
+Use with care. It may make a name seemingly unambiguous, when in fact
+the person using it might be referring to the aggregate.
 .
 .BP \-0
 Don't recurse; just print all immediate child taxa.

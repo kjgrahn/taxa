@@ -31,6 +31,7 @@ namespace dyntaxa {
 		std::istream& names,
 		std::istream& dist,
 		bool use_synonyms,
+		bool wash_aggregates,
 		bool list_genera);
 
 	void list(std::ostream&, Seen<Id>&, const std::string& taxon) const;
@@ -44,6 +45,7 @@ namespace dyntaxa {
 	void list(std::ostream&, Seen<Id>&, Indent&, const Taxon& taxon) const;
 
 	const bool use_synonyms;
+	const bool wash_aggregates;
 	const bool list_genera;
 	Memo<std::string> memo;
 
