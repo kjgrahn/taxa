@@ -8,6 +8,7 @@ namespace dyntaxa {
 
     /**
      * An entry in VernacularName.csv.
+     * I.e. a Name is a vernacular name, never a scientific name.
      *
      * taxonId
      * vernacularName

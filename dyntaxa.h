@@ -18,6 +18,13 @@ namespace dyntaxa {
 
     class Names;
 
+    /**
+     * The data set, or enough of it so it can be traversed to produce
+     * flat taxon lists.
+     *
+     * The public methods are const; the mutable state is broken out
+     * into Seen<Id> in order to keep the rest const.
+     */
     class Dyntaxa {
     public:
 	Dyntaxa(std::istream& taxa,

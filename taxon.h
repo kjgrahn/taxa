@@ -9,6 +9,10 @@ namespace dyntaxa {
     /**
      * An entry in Taxon.csv.
      *
+     * "Taxon" is a bit misleading: Taxon.csv covers all scientific
+     * names and all ranks. 40 percent of these are synonyms or
+     * problematic in some way.
+     *
      * taxonId                    190414
      * acceptedNameUsageID        108789
      * parentNameUsageID           29722 never a TaxonName
