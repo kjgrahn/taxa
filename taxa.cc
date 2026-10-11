@@ -85,24 +85,12 @@ int main(int argc, char** argv)
     while ((ch = getopt_long(argc, argv,
 			     optstring, long_options, 0)) != -1) {
 	switch(ch) {
-	case 'n':
-	    arg.synonyms = false;
-	    break;
-	case '0':
-	    arg.flat = true;
-	    break;
-	case 'g':
-	    arg.genera = false;
-	    break;
-	case 'X':
-	    arg.file.taxa = optarg;
-	    break;
-	case 'N':
-	    arg.file.names = optarg;
-	    break;
-	case 'D':
-	    arg.file.dist = optarg;
-	    break;
+	case 'n': arg.synonyms = false;		break;
+	case '0': arg.flat = true;		break;
+	case 'g': arg.genera = false;		break;
+	case 'X': arg.file.taxa = optarg;	break;
+	case 'N': arg.file.names = optarg;	break;
+	case 'D': arg.file.dist = optarg;	break;
 	case 'h':
 	    std::cout << usage << '\n';
 	    return 0;
