@@ -60,7 +60,7 @@ std::ostream& Names::put(std::ostream& os,
     };
 
     auto pit = std::find_if(begin(names), end(names), is_preferred);
-    if (pit==end(names)) pit = begin(names);
+    if (use_synonyms && pit==end(names)) pit = begin(names);
 
     const auto name = normalize(taxon.name);
     seen(name);
