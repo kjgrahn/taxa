@@ -11,16 +11,15 @@ What's in this repo is three things:
 A.  A utility for unpacking a DwC-A archive and cleaning it up, making
     it suitable for tracking and sharing in a Git archive.
 
-B.  Such an unpacked DwC-A for Dyntaxa, updated now and then.
-    This lets you follow the changes made by Artdatabanken, go
-    back in time and compare, and so on.
-
-C.  A utility taxa(1) for producing flat taxon lists from the Dyntaxa
+B.  A utility taxa(1) for producing flat taxon lists from the Dyntaxa
     data. These are suitable for use with programs which needs taxon
     lists, like gavia[2] and groblad[3].
 
-This is a less-than-ideal mix of tools and other people's data.
-I might split it at some point.
+C.  Configuration for producing the taxon lists I want, e.g. a
+    separate list for Tracheophyta, with the families in the order
+    I prefer. Also a make target for downloading the DwC.
+
+This is a less-than-ideal mix of tools and subjective config.
 
 The software is C++ and a Makefile, and should build on any Unix with
 minor adjustments, if you install libarchive first.
@@ -34,7 +33,6 @@ The source code here is available under The GNU General Public License
 
     Jörgen Grahn <grahn@snipabacken.se>
 
-[1]  https://metadata.artfakta.se/taxonomiskdata,
-     https://artfakta.se/metadata/dyntaxa
+[1]  https://artfakta.se/metadata/dyntaxa
 [2]  git://snipabacken.se/gavia
 [3]  git://snipabacken.se/groblad

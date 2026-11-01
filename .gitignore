@@ -2,7 +2,7 @@
 utf8/*
 latin1/*
 taxa
-unpack
+dwc_unpack
 *.o
 lib*.a
 dep/

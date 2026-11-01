@@ -4,17 +4,19 @@ latin1/%: utf8/%
 	iconv -futf8 -t latin1//TRANSLIT $< >$@
 
 utf8/%: gen/% taxa
-	grep -v ^\# $< | xargs ./taxa -ng dwc >$@
+	grep -v ^\# $< | xargs ./taxa -agn dwc >$@
 
 .PHONY: update
 # see https://www.gbif.org/dataset/de8934f4-a136-481c-a87a-b0b202b80a31
 # The "subscription key" is public information.
-update: unpack
+update: dwc_unpack
 	curl -fL \
 	"https://api.artdatabanken.se/taxonservice/v1/DarwinCore/Download?subscription-key=4b068709e7f2427d9fc76bf42d8e2b57" \
-	| ./unpack dwc
+	| ./dwc_unpack dwc
 
 SHELL=/bin/bash
+INSTALLBASE=/usr/local
+
 CXXFLAGS=-Wall -Wextra -pedantic -std=c++17 -g -Os
 CPPFLAGS=
 ARFLAGS=rTP
@@ -22,7 +24,7 @@ ARFLAGS=rTP
 taxa: taxa.o libtaxa.a
 	$(CXX) $(CXXFLAGS) -L. -o $@ $< -ltaxa
 
-unpack: unpack.o libtaxa.a
+dwc_unpack: unpack.o libtaxa.a
 	$(CXX) $(CXXFLAGS) -L. -o $@ $< -ltaxa -larchive
 
 libtaxa.a: split.o
@@ -57,9 +59,18 @@ test/%.o: CPPFLAGS+=-I.
 
 # other
 
+.PHONY: install
+install: taxa taxa.1
+install: dwc_unpack unpack.1
+	install -d $(INSTALLBASE)/{bin,man/man1}
+	install -m555 taxa $(INSTALLBASE)/bin/
+	install -m555 dwc_unpack $(INSTALLBASE)/bin/
+	install -m644 taxa.1 $(INSTALLBASE)/man/man1/
+	install -m644 unpack.1 $(INSTALLBASE)/man/man1/dwc_unpack.1
+
 .PHONY: clean
 clean:
-	$(RM) taxa unpack
+	$(RM) taxa dwc_unpack
 	$(RM) test/test test/test.cc
 	$(RM) *.o lib*.a
 	$(RM) test/*.o
